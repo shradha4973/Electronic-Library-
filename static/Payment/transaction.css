@@ -1,0 +1,28 @@
+.s_progress {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 20%;
+}
+
+@media only screen and (max-width:924px) {
+    .s_progress {
+        width: 70%;
+        margin: 10 px auto;
+        margin-top: 60%;
+    }
+}
+
+.s_body{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.s_main{
+    flex: 1 0 auto;
+}
+
+.s_responsive {
+    width: 30%;
+
+}

@@ -1,0 +1,59 @@
+<!-- Dropdown Structure -->
+<ul id="dropdown1" class="dropdown-content" style="height:0px;">
+  {% if request.user.is_authenticated %}
+  <li><a href="{% url 'Payment:updateamount' %}" style="padding-right: 0px;">Add Balance</a></li>
+  <li><a href="{% url 'Accounts:logout_user' %}">Logout</a></li>
+  {% else %}
+  <li><a href="{% url 'Accounts:login_user' %}">Login</a></li>
+  <li><a href="{% url 'Accounts:register_user' %}">Register</a></li>
+  {% endif %}
+</ul>
+<nav>
+  <div class="nav-wrapper">
+    <a href="/" class="brand-logo" style="margin-left: 60px;">E-Library</a>
+    <ul class="right hide-on-med-and-down" style="height: 0px;">
+      {% if request.user.is_authenticated %}
+      <li>
+        <a href="{% url 'ReadBook:mybooks' %}"><i class="material-icons" style="display: inline; vertical-align: bottom;">book</i>My Books</a>
+      </li>
+      <li>
+        <a href="{% url 'ReadBook:addbook' %}"><i class="material-icons" style="display: inline; vertical-align: bottom;">add</i>AddBook</a><br />
+      </li>
+      {% if amount %}
+      <li>
+        <span style="font-weight: 501;border: 1px solid;padding: 5px;border-radius: 3px;vertical-align: sub;margin: 5px;">
+          <i class="material-icons" style="display: inline;vertical-align: bottom;">account_balance_wallet</i> ${{amount}}
+        </span>
+      </li>
+      {% endif %} {% else %}
+      <li><a href="/admin/" style="font-weight: 501;">Admin</a><br /></li>
+      {% endif %}
+      <!-- Dropdown Trigger -->
+      <li>
+        <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+          <span style="font-weight: 501;">
+            <i class="material-icons" style="display: inline; vertical-align: bottom;">account_circle</i>
+            {{request.user.is_authenticated|yesno:',Login'}}{% firstof request.user.username|title %}
+            <i class="material-icons right" style="margin-left: 0px;">arrow_drop_down </i>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<nav style="width: 500px; margin-top: -65px; margin-left: 380px; margin-bottom: 20px;">
+  <div class="nav-wrapper" style="width: 500px; ">
+    <form method="GET" action='{% url "Search:search" %}'>
+      <div class="input-field">
+        <input id="search" type="search" name="q" placeholder="Search" />
+        <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+        <i class="material-icons">close</i>
+      </div>
+    </form>
+  </div>
+</nav>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".dropdown-trigger").dropdown();
+  });
+</script>

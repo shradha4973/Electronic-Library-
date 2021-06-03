@@ -1,0 +1,203 @@
+{% extends 'Base/Header.html' %} {% block content %} {% load static %}
+<div class="row" style="border:1px solid #9e9e9e">
+  <div style="text-align: center;">
+    <h5>Preview</h5>
+  </div>
+  <div class="row" style="border-top: 1px solid #9e9e9e;">
+    <div class="col s12 m5 l4 ">
+      <div style="text-align:center; margin-top: 15px;">
+        <img
+          src="{% static 'ReadBook/no_cover.jpg' %}"
+          alt="Uploaded Picture"
+          id="uploadedpic"
+          class="img-fluid"
+          style="height:292px; border: 1px solid #9e9e9e; padding: 5px;"
+        />
+      </div>
+    </div>
+    <div class=" col s12 m7 l8" style="max-height: 311px; overflow: hidden;">
+      <div style="padding:25px 15px;">
+        <div class="row">
+          <h5>
+            Titile:
+            <span id="add_title" style="text-transform: capitalize;"></span>
+          </h5>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <h6>
+              <span style="font-weight: 501;"> Type: </span>
+              <span id="add_cat_type" style="text-transform: capitalize;"></span>
+              <span id="add_book_type"></span>
+            </h6>
+          </div>
+          <div class="col s12">
+            <h6 style="overflow: hidden;overflow-wrap: break-word;padding: 3px;">
+              <span style="display: block; font-weight: 501;margin-bottom: 5px">
+                Description:
+              </span>
+              &emsp;
+              <span id="add_description" style="text-align:justify; text-justify: inter-word;"> </span>
+            </h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div style="display: flex; align-items: center; justify-content: center;" class="">
+      <div class="col s12 " style="margin-left: unset; border-top: 1px solid  #9e9e9e;">
+        <div>
+          <h4 style="text-align: center;">Add Book Description</h4>
+          <!-- error displayig area -->
+          {% if messages %} {% for message in messages %}
+          <div {% if message.tags %} class="{{ message.tags }} alert-danger" {% endif %} id="alert">
+            {{ message }}
+            <i class="material-icons" style="color:black; float:right; cursor: pointer;" id="closealert">
+              close
+            </i>
+          </div>
+          {% endfor %} {% endif %}
+          <!-- end error displaying area -->
+        </div>
+        <form method="POST" enctype="multipart/form-data" style="padding-top: 20px;" id="addbookform">
+          {% csrf_token %}
+          <div class="input-field col s12 m6">
+            <label for="bookname">Book Title *</label>
+            <input type="text" name="name" id="bookname" class="validate" required value="{{bookname}}" />
+          </div>
+          <div class="input-field col s12 m6">
+            <label for="category">Book Category *</label>
+            <input type="text" name="category" id="category" class="validate" required value="{{category}}" />
+          </div>
+          <div class="col s12 m6">
+            <label for="booktype" class="fs15">Book Type: *</label>
+            <select name="type" id="booktype" style="display: block;" required>
+              <option value="" disabled selected>Choose your option</option>
+              <option value="Premium">Premium</option>
+              <option value="Free">Free</option>
+            </select>
+          </div>
+          <div class="input-field col s12 m6">
+            <label for="bookprice">Book Price</label>
+            <input type="Number" name="price" id="bookprice" class="validate" value="{{bookprice}}" />
+          </div>
+          <div class="col s12 m6">
+            <label for="bookcover" class="fs15">Book Cover:</label><br />
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Upload</span>
+                <input type="file" name="image" accept="image/jpeg" id="bookcover" />
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload Book Cover" id="bookcoverpath" />
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6">
+            <label for="bookfile" class="fs15">Book File: *</label><br />
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Upload</span>
+                <input type="file" name="file" accept="application/pdf" id="bookfile" required />
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload Book .pdf File" id="bookfilepath" />
+              </div>
+            </div>
+          </div>
+          <div class="col s12">
+            <label for="bookdescription" class="fs15">Abstract of Book: *</label>
+            <textarea
+              name="description"
+              id="bookdescription"
+              style="height: 8rem;resize: none; border:solid 0.5px #9e9e9e; margin-top:5px"
+              placeholder="Description"
+              required
+            >
+{{description}}</textarea
+            >
+          </div>
+          <div class="input-field col s12 m6">
+            <button type="button" class="btn waves-effect waves-light" style="width:100%;" id="cancel">
+              Cancel <i class="material-icons right">cancel</i>
+            </button>
+          </div>
+          <div class="input-field col s12 m6">
+            <button type="submit" class="btn waves-effect waves-light" style="width:100%;">Add Book <i class="material-icons right">add</i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // for disabling price input filed
+  $(document).ready(function() {
+    if ($("#booktype option:selected").val() == "Free") {
+      $("#bookprice").attr("disabled", "disabled");
+    }
+    $("#booktype").change(function() {
+      let value = $("#booktype option:selected").val();
+      if (value == "Free") {
+        $("#bookprice").val("");
+        $("#bookprice").attr("disabled", "disabled");
+      } else {
+        $("#bookprice").removeAttr("disabled");
+      }
+    });
+  });
+
+  //auto add text
+  $(document).ready(function() {
+    //on load
+    if ($("#bookname").val()) {
+      $("#add_title").text($("#bookname").val());
+    }
+    if ($("#category").val()) {
+      $("#add_cat_type").text($("#category").val());
+    }
+    if ($("#bookdescription").val()) {
+      $("#add_description").text($("#bookdescription").val());
+    }
+    //on change
+    $("#bookname").change(function() {
+      $("#add_title").text($(this).val());
+    });
+    $("#category").change(function() {
+      $("#add_cat_type").text($(this).val());
+    });
+    $("#booktype").change(function() {
+      $("#add_book_type").text(" | " + $("#booktype option:selected").val());
+    });
+    $("#bookdescription").change(function() {
+      $("#add_description").text($(this).val());
+    });
+  });
+
+  $(document).ready(function() {
+    $("#cancel").click(function() {
+      $("#addbookform").trigger("reset");
+      $("#add_title").text("");
+      $("#add_cat_type").text("");
+      $("#add_description").text("");
+    });
+  });
+
+  //to pre load images addded in the field
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        $("#uploadedpic").attr("src", e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  $("#bookcover").change(function() {
+    readURL(this);
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'Base/header.html' %}
+{% block content %}
+<form method="get" class="search-bar">
+	<input type="text" class="form-control" name="q" placeholder="Search" id="id_b">
+</form>
+{% if books %}
+<table class="table">
+	<thead>
+
+	<tbody>
+		{% for book in books %}
+		<tr>
+			<td>{{book.book_name}}</td>
+			<td>{{book.book_file}}</td>
+		</tr>
+	</tbody>
+	</thead>
+	{% endfor %}
+</table>
+{% else %}
+<div class="container">
+	<div class="row">
+		<div class="card-body">
+			<h1 class="card-title">No Result</h1>
+
+		</div>
+	</div>
+</div>
+{% endif %}
+<script type="text/javascript">
+	document.getElementbyId('id_b').value = "{{query}}"
+</script>
+{% endblock %}

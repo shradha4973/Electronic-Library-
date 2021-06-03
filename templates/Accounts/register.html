@@ -1,0 +1,38 @@
+{% extends 'Base/Header.html' %}
+{% block content %}
+	{% if messages %} 
+		{% for message in messages %}
+			<div {% if message.tags %} class="{{ message.tags }} alert-danger" {% endif %} id="alert">
+				{{ message }}
+				<i class="material-icons" style="color:black; float:right; cursor: pointer;" id="closealert">
+					close
+				</i>
+			</div>
+  	{% endfor %} 
+	{% endif %}
+	<h1>Join us today!</h1>
+	<form method="POST">
+		{% if error %}
+		<div>
+			{{error}}
+		</div>
+		{% endif %}
+		{% csrf_token %}
+		<input type="text" name="first_name" placeholder="FirstName"><br>
+		<input type="text" name="last_name" placeholder="LastName"><br>
+		<input type="text" name="username" placeholder="Username"><br>
+		<input type="email" name="email" placeholder="Enter your email"><br>
+		<p>Choose author type:</p>
+		<div class="input-field col 14">
+		<select name="user_type" style="display: block;">
+			<option disabled="">Choose</option>
+			<option>Reader</option>
+			<option>Author</option>
+		</select></div><br>
+		<input type="password" name="password1" placeholder="Enter your password"><br>
+		<input type="password" name="password2" placeholder="Enter your password for conformation"><br>
+		<input type="submit" name="" value="Register" class="btn">
+</form>
+<h2>Already have an account?<a href="Accounts/login.html">Sign IN</a></h2>
+
+{% endblock content %}

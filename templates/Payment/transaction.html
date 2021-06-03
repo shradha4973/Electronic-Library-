@@ -1,0 +1,102 @@
+{% extends 'Base/Header.html'%}
+{% block content %}
+
+{% load static %}
+<div class="section"></div>
+<div style="background-image: url('{% static 'Payment/image.png.jpg' %}');">
+  <div id="flayer" style="margin-left:50px;">
+    <div id="slayer">
+      <div class="container" id="content">
+        <div class="row">
+          <div class="col l3 m3 s12"></div>
+          <div class="col l6 m6 s12">
+            {% if error %}
+            <div class="s-alert-danger">
+              {{error}}
+            </div>
+            {% endif %}
+            <form action="{% url 'Payment:Payment' book.pk %}" method="POST">
+              {% csrf_token %}
+              <div class="card-panel z-depth-5">
+                <img src="{% static 'Payment/logo.jpg' %}" alt="" class="s_responsive">
+                <div class="sidebar">
+                  <div class="sidebar-text">
+  
+                    <div class="input-field">
+                      <i class="material-icons prefix">date_range</i>
+                      <input type="text" name="date" class="sdate" id="nowdate" value="" disabled="">
+                    </div>
+  
+                    <div class="input-field">
+                      <i class="material-icons prefix">account_circle</i>
+                      <input type="text" name="username" class="suser" value="{{book.uploaded_by}}" disabled="">
+                      <label>Username</label>
+                    </div>
+  
+                    <div class="input-field">
+                      <i class="material-icons prefix">book</i>
+                      <input type="text" name="book" class="sbook" value="{{book.book_name}}" disabled="">
+                      <label>Book</label>
+                    </div>
+                    <div class="input-field">
+                      <i class="material-icons prefix">payment</i>
+                      <input type="text" name="price" class="sprice" value="{{book.book_price}}" disabled="">
+                      <label>Price</label>
+                    </div>
+                    <div class="input-field">
+                      <i class="material-icons prefix">payment</i>
+                      <input type="text" name="discount" class="sdiscount" value="{{book.book_discount}}%" disabled="">
+                      <label>Discount</label>
+                    </div>
+  
+                    <div class="input-field">
+                      <i class="material-icons prefix">payment</i>
+                      <input type="text" name="total" class="sfinalpayment" value="{{total}}" disabled="">
+                      <label>Final Payment</label>
+                    </div>
+  
+                    <input type="submit" name="submit" value="Conform Payment" class="btn left col s12">
+  
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const login = document.querySelectorAll(".modal");
+  M.Modal.init(login, {
+    opacity: 0.7,
+    dismissible: false
+  });
+
+  document.querySelector("#content").style.display = "none";
+  document.querySelector("#flayer").classList.add("s_progress");
+  document.querySelector("#slayer").classList.add("indeterminate");
+
+  setTimeout(function () {
+    document.querySelector("#flayer").classList.remove("s_progress");
+    document.querySelector("#slayer").classList.remove("indeterminate");
+    document.querySelector("#content").style.display = "block";
+  }, 500)
+
+  $(document).ready(function (){
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    $("#nowdate").val(date);
+  })
+</script>
+
+</body>
+
+
+</html>
+
+{% endblock %}
